@@ -82,34 +82,16 @@ class GatewayMQTT(mqtt.Client):
             print('bad connection:{}'.format(rc))
 
     def on_message(self, mqttc, obj, msg) :
-        print("msg:", msg)
-        print(type(msg))
         j=json.loads(msg.payload.decode())
-        print("j:")
-        print(j)
         data= j["data"]
         real_data= base64.b64decode(data).decode()
-        print("data:")
-        print()
-        print(data)
-        print()
-        print("after decode_data:")
-        print(real_data)
-        print()
         self.logger.debug('downlink payload: {}'.format(j))
-        print()
-        print("dataList!!!:")
-        print(type(real_data))
-     
         
         alist = self.splitData(real_data)
-        print(type(alist))
-        print("alist: ",alist)
         g, p, b = self.getGPA(alist)
         print ("g: ",g ," p: ", p,"b: ",b)
         
         temp = g
-        
         for i in range(b) :
             g *= temp
         B = g % p
